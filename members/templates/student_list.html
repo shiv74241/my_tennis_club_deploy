@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Students Table</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Student Table</h2>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>LastName</th>
+  
+    </tr>
+
+    {% for s in students %}
+    <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.firstname }}</td>
+        <td>{{ s.lastname }}</td>
+      
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">No Students Found</td>
+    </tr>
+    {% endfor %}
+</table>
+<h2>Contact Message Table</h2>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Message</th>
+        <th>Created_date</th>
+  
+    </tr>
+
+    {% for m in messagess %}
+    <tr>
+        <td>{{ m.id }}</td>
+        <td>{{ m.name }}</td>
+        <td>{{ m.email}}</td>
+        <td>{{ m.message}}</td>
+        <td>{{ m.created_at}}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">No Students Found messagess</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+
+<h2>Contact Messages (5 per page) in Table Formate page_objt1</h2>
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+    <thead style="background-color:#f2f2f2;">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Message</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+
+
+    <tbody>
+        {% for msg in page_obj1 %}
+        <tr>
+            <td>{{ msg.id }}</td>
+            <td>{{ msg.name }}</td>
+            <td>{{ msg.email }}</td>
+            <td>{{ msg.message }}</td>
+            <td>{{ msg.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div style="margin-top: 20px;">
+
+
+    {% if page_obj1.has_previous %}
+        <a href="?page={{ page_obj1.previous_page_number }}">← Previous</a>
+    {% endif %}
+
+
+    <span> | Page {{ page_obj1.number }} of {{ page_obj1.paginator1.num_pages }} | </span>
+
+
+    {% if page_obj1.has_next %}
+        <a href="?page={{ page_obj1.next_page_number }}">Next →</a>
+    {% endif %}
+
+
+</div>
+
+
+
+
+
+
+
+
+</body>
+</html>
+

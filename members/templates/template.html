@@ -1,0 +1,282 @@
+
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+
+<link rel="stylesheet" href="{% static 'myfirst.css' %}">
+
+
+<body>
+
+{% include 'mymenu.html' %}
+{% include "mymenu.html" with me="TOBIAS" sponsor="W3SCHOOLS" %}
+
+
+{% for x in fruits %}
+  <h1>{{ x }}</h1>
+{% endfor %}
+
+<p>In views.py you can see what the fruits variable looks like.</p>
+
+#Template Variables
+<h1>Hello {{ firstname }}, how are you?</h1>
+
+
+#Create Variables in Template
+{% with firstname="****Tobias Shiv Kumar Chauhan****" %}
+<h1>Hello {{ firstname }}, how are you?</h1>
+{% endwith %}
+
+
+{{mymembers}}
+# Data From a Model
+<ul>
+  {% for x in mymembers %}
+    <li>{{ x.firstname }} {{x.lastname}}</li>
+  {% endfor %}
+</ul>
+
+--------------------------------------Django Template Tags----------------------------------
+{% if greeting == 2 %}
+  <h1>Hello</h1>
+{% else %}
+  <h1>Otherwise you are buffalo</h1>
+{%endif%} 
+
+{% if greeting == 2 %}
+  <h1>Hello</h1>
+{% elif greeting == 3 %}
+  <h1>Otherwise you are buffalo</h1>  
+{% else %}
+  <h1>Thanks for being here</h1> 
+{% endif %} 
+
+{% if greetings %}
+  <h1>Hello</h1>
+{% endif %} 
+
+
+{% if greetings == 2 and day == "monday" %}
+  <h1>You are goer temple in this day {{day}}</h1>
+{% endif %} 
+
+{% if greetings == 3 and day == "monday" or greetingss == 6 %}
+  <h1>You are goer temple in this day another way {{day}}</h1>
+{% endif %} 
+
+{% if 'Banana' in fruits %}
+<h1>Banana is presented in Fruits</h1>
+{% else %}
+<h1>Banana is not presented in fruits</h1>
+{% endif %}
+
+{% if x is y %}
+<h1>yes</h1>
+{% else %}
+<h1>No</h1>
+{% endif %}
+
+{% for x in fruits %}
+  <h1>{{ x }}</h1>
+{% endfor %}
+
+{% for x in cars %}
+  <h1>{{ x.brand }}</h1>
+  <p>{{ x.model }}</p>
+  <p>{{ x.year }}</p>
+{% endfor %} 
+
+{% for x in mydata %}
+  <h1>{{ x.id }}</h1>
+  <p>
+    {{ x.firstname }}
+    {{ x.lastname }}
+  </p>
+{% endfor %} 
+
+<ul>
+  {% for x in emptytestobject %}
+    <li>{{ x.firstname }}</li>
+  {% empty %}
+    <li>No members</li>
+  {% endfor %}
+</ul> 
+
+
+<ul>
+  {% for x in fruits %}
+    <li>{{ forloop.counter }}</li>
+  {% endfor %}
+</ul> 
+
+<ul>
+  {% for x in fruits %}
+    <li
+      {% if forloop.first %}
+        style='background-color:lightblue;'
+      {% endif %}
+    >{{ x }}</li>
+  {% endfor %}
+</ul> 
+
+<ul>
+  {% for x in fruits %}
+    <li
+      {% if forloop.last %}
+        style='background-color:lightblue;'
+      {% endif %}
+    >{{ x }}</li>
+  {% endfor %}
+</ul> 
+
+<ul>
+  {% for x in fruits %}
+    <li>{{ forloop.revcounter0 }}</li>
+  {% endfor %}
+</ul> 
+
+
+<h1>Welcome Everyone</h1>
+{% comment %}
+<h1>this comment for above line</h1>
+{% endcomment %}
+
+<h1>Welcome Everyone</h1>
+{% comment "this was the original welcome message" %}
+    <h1>Welcome ladies and gentlemen</h1>
+{% endcomment %}
+
+
+<h1>Welcome {# this is also comment for welcome#}</h1>
+
+
+{% include 'footer.html' %}
+
+<h1> mydata </h1>
+{{mydata}}
+
+<table border='1'>
+  <tr>
+    <th>ID</th>
+    <th>Firstname</th>
+    <th>Lastname</th>
+  </tr>
+  {% for x in mydata %}
+    <tr>
+      <td>{{ x.id }}</td><td>{{ x.firstname }}</td><td>{{ x.lastname }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+<h1> # mymembers #</h1>
+{{mymembers}}
+<table border='1'>
+  <tr>
+    <th>ID</th>
+    <th>Firstname</th>
+    <th>Lastname</th>
+  </tr>
+  {% for x in mymembers %}
+    <tr>
+      <td>{{ x.id }}</td><td>{{ x.firstname }}</td><td>{{ x.lastname }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+<h1> # columns # </h1>
+{{columns}}
+{{columns1}}
+
+<table border='1'>
+  <tr>
+    <th>firstname</th>
+  </tr>
+  {% for x in columns1 %}
+    <tr>
+     <td>{{ x.0 }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+{{filterlist}}
+<table border='1'>
+  <tr>
+    <th>firstname</th>
+    <th>lastname</th>
+    <th>phone</th>
+  </tr>
+  {% for x in filterlist %}
+    <tr>
+     <td>{{ x.firstname }}</td><td>{{ x.lastname }}</td><td>{{ x.phone }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+<h1> # mydata2 #</h1>
+ {{mydata2}}
+<h1> # mymembers3 #</h1>
+{{mymembers3}}
+
+<h1> #  filterlist3 #</h1>
+{{filterlist3}}
+
+<table border='1'>
+  <tr>
+    <th>firstname</th>
+  </tr>
+  {% for x in filterlist3 %}
+    <tr>
+     <td>{{ x.firstname }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+
+<h1> # filterlist4 # </h1>
+{{filterlist4}}
+
+<h1># mymembers6 #</h1>
+{{mymembers6}}
+
+<h1># orderby1 # </h1>
+{{orderby1}}
+
+<table border='1'>
+  <tr>
+    <th>ID</th>
+    <th>FIRSTNAME</th>
+    <th>LASTNAME</th>
+    <th>PHONE</th>
+    <th>DATE</th>
+  </tr>
+  {% for x in orderby1 %}
+    <tr>
+     <td>{{ x.id }}</td><td>{{ x.firstname }}</td><td>{{ x.lastname }}</td><td>{{ x.phone }}</td><td>{{ x.joined_date }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+<h1># orderby2 # </h1>
+{{orderby2}}
+
+<table border='1'>
+  <tr>
+    <th>ID</th>
+    <th>FIRSTNAME</th>
+    <th>LASTNAME</th>
+    <th>PHONE</th>
+    <th>DATE</th>
+  </tr>
+  {% for x in orderby2 %}
+    <tr>
+     <td>{{ x.id }}</td><td>{{ x.firstname }}</td><td>{{ x.lastname }}</td><td>{{ x.phone }}</td><td>{{ x.joined_date }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+
+</body>
+</html>
