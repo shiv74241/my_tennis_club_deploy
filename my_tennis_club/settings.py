@@ -80,6 +80,27 @@ WSGI_APPLICATION = 'my_tennis_club.wsgi.application'
 import os
 import dj_database_url
 
+
+# I have to make it comments because render has given yourself database
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'mytennisdb',
+#        'USER': 'root',
+#        'PASSWORD': 'prudent',
+#        'HOST': '127.0.0.1',
+#        'PORT': '3306',
+#        'OPTIONS': {
+#            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+#        }
+#    }
+#}
+
+
+
+import os
+import dj_database_url
+
 DATABASES = {
     "default": dj_database_url.parse(
         os.environ.get("DATABASE_URL")
