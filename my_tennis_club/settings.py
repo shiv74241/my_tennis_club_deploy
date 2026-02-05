@@ -77,41 +77,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'my_tennis_club.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-#DATABASES = {
- #   'default': {
-  #      'ENGINE': 'django.db.backends.sqlite3',
-   #     'NAME': BASE_DIR / 'db.sqlite3',
-    #}
-#}
-
-#DATABASES = {
- #   'default': {
-  #      'ENGINE': 'django.db.backends.postgresql',
-   #     'NAME': 'postgres',
-    #    'USER': 'postgres',
-     #   'PASSWORD': 'postgres_shiv741',
-      #  'HOST': 'database-1.cx20isg2ctj6.ap-south-1.rds.amazonaws.com',
-       # 'PORT': '5432'
-    #}
-#}
+import os
+import dj_database_url
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mytennisdb',
-        'USER': 'root',
-        'PASSWORD': 'prudent',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
-    }
+    "default": dj_database_url.parse(
+        os.environ.get("DATABASE_URL")
+    )
 }
-
 
 
 
