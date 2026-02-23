@@ -149,4 +149,8 @@ def payment_bank(request):
 
 
 def upi_payment(request):
-    return render(request, "pay.html")    
+    return render(request, "pay.html") 
+
+
+def privacy_policy(request):
+    return render(request, "privacy_policy.html") 
