@@ -1,0 +1,67 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block content %}
+<div style="width:90%; margin:auto; text-align:center;">
+
+    <h2>Vest Products</h2>
+
+    <div style="display:flex; justify-content:center; gap:40px; margin-top:30px;">
+
+        <!-- Product 1 -->
+        <div>
+            <img src="{% static 'vest1.jpg' %}" width="250" style="border:1px solid #ccc; padding:10px;">
+            <h3>Vest Product 1</h3>
+
+            <!-- Payment Buttons -->
+            <a href="/payment/cod/?product=vest1">
+                <button style="padding:10px 25px; margin-top:10px;">Cash on Delivery</button>
+            </a>
+
+            <a href="/payment/bank/?product=vest1">
+                <button style="padding:10px 25px; margin-top:10px;">Bank Transfer</button>
+            </a>
+<h3>Premium Cotton Vest</h3>
+    <p>Price: ₹299</p>
+
+    <!-- UPI Payment Button -->
+    <a href="upi://pay?pa=shivkumar@oksbi&pn=SHIV+KUMAR&am=299&tn=Vest+Order"
+       class="btn btn-success"
+       style="
+           display:inline-block;
+           padding:12px 20px;
+           background:#0f8;
+           color:white;
+           border-radius:6px;
+           text-decoration:none;
+           font-size:16px;
+       ">
+        Pay ₹299 via UPI
+    </a>
+
+    <p style="font-size:12px; margin-top:6px; color:#666;">
+        *Works only on mobile (GPay / PhonePe / Paytm)
+    </p>
+
+
+        </div>
+
+        <!-- Product 2 -->
+        <div>
+            <img src="{% static 'vest2.jpg' %}" width="250" style="border:1px solid #ccc; padding:10px;">
+            <h3>Vest Product 2</h3>
+
+            <!-- Payment Buttons -->
+            <a href="/payment/cod/?product=vest2">
+                <button style="padding:10px 25px; margin-top:10px;">Cash on Delivery</button>
+            </a>
+
+            <a href="/payment/bank/?product=vest2">
+                <button style="padding:10px 25px; margin-top:10px;">Bank Transfer</button>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
