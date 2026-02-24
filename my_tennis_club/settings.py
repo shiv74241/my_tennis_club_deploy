@@ -98,16 +98,48 @@ import dj_database_url
 
 
 
+# Change this:
+import os
+from dotenv import load_dotenv
+import dj_database_url
+
+load_dotenv() # This loads the variables from .env
+
+
+# To this (Safer for local development):
+import os
+import dj_database_url
+
 DATABASES = {
-    "default": dj_database_url.parse(
-        os.environ.get("DATABASE_URL"),
+    'default': dj_database_url.config(
+        default=f'sqlite:///{os.path.join(BASE_DIR, "db.sqlite3")}',
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=False  # Local SQLite doesn't need SSL
     )
 }
 
 
+# settings.py
+import os
 
+# Use an environment variable for the key, or a long random string as fallback
+SECRET_KEY = os.environ.get('SECRET_KEY', 'shivkumar@741')
+
+# This will be False on Render, but you can set it to True locally in your .env
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+
+ALLOWED_HOSTS = ['my-tennis-club-deploy-2.onrender.com', 'localhost', '127.0.0.1']
+
+
+
+# Security Settings for Production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000 # 1 year
+    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
 
 # Password validation
