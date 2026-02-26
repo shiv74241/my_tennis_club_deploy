@@ -18,6 +18,7 @@ urlpatterns = [
     path('payment/bank/', views.payment_bank, name='payment_bank'),
     path("pay/", views.upi_payment, name="upi_payment"),
     path("privacy-policy/", views.privacy_policy, name="privacy_policy"),
+    path("track-visitor/", views.track_visitor, name="track_visitor"),
     ]
 
 

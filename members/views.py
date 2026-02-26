@@ -154,3 +154,48 @@ def upi_payment(request):
 
 def privacy_policy(request):
     return render(request, "privacy_policy.html") 
+
+
+
+import uuid
+from django.shortcuts import render
+from .models import Visitor
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0]
+    return request.META.get('REMOTE_ADDR')
+
+
+def track_visitor(request):
+
+    visitor_id = request.COOKIES.get('visitor_id')
+
+    if not visitor_id:
+        visitor_id = str(uuid.uuid4())
+
+    ip = get_client_ip(request)
+    user_agent = request.META.get('HTTP_USER_AGENT')
+
+    # Save if not already saved
+    if not Visitor.objects.filter(visitor_id=visitor_id).exists():
+        Visitor.objects.create(
+            visitor_id=visitor_id,
+            ip_address=ip,
+            user_agent=user_agent
+        )
+
+    response = render(request, "main.html")
+
+    # Set cookie (30 days)
+    response.set_cookie(
+        key='visitor_id',
+        value=visitor_id,
+        max_age=60*60*24*30,
+        secure=True,        # Important for HTTPS (Render uses HTTPS)
+        httponly=True, # True/False = JavaScript से एक्सेस न हो (सुरक्षा के लिए बेहतर, जब तक JS को ज़रूरत न हो)
+        samesite='None'  # None/Lax = if you want to send "cross site website like fb" then use it.
+    )
+
+    return response
