@@ -186,7 +186,7 @@ def track_visitor(request):
             user_agent=user_agent
         )
 
-    response = render(request, "main.html")
+    response = render(request, "track-visitor.html")
 
     # Set cookie (30 days)
     response.set_cookie(
