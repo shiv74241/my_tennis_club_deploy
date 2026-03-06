@@ -159,7 +159,7 @@ def privacy_policy(request):
 
 import uuid
 from django.shortcuts import render
-from .models import Visitor
+from .models import Visitors
 
 
 def get_client_ip(request):
@@ -179,9 +179,9 @@ def track_visitor(request):
     ip = get_client_ip(request)
     user_agent = request.META.get('HTTP_USER_AGENT')
 
-    # Save visitor
-    if not Visitor.objects.filter(visitor_id=visitor_id).exists():
-        Visitor.objects.create(
+    # Save visitors
+    if not Visitors.objects.filter(visitor_id=visitor_id).exists():
+        Visitors.objects.create(
             visitor_id=visitor_id,
             ip_address=ip,
             user_agent=user_agent
