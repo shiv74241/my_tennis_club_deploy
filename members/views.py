@@ -178,12 +178,15 @@ def track_visitor(request):
     ip = get_client_ip(request)
     user_agent = request.META.get('HTTP_USER_AGENT')
 
+    referrer = request.META.get('HTTP_REFERER')
+
     # Save if not already saved
     if not Visitor.objects.filter(visitor_id=visitor_id).exists():
         Visitor.objects.create(
             visitor_id=visitor_id,
             ip_address=ip,
-            user_agent=user_agent
+            user_agent=user_agent,
+            referrer=referrer
         )
 
     response = render(request, "track-visitor.html")
