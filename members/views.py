@@ -161,6 +161,7 @@ import uuid
 from django.shortcuts import render
 from .models import Visitor
 
+
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -178,27 +179,22 @@ def track_visitor(request):
     ip = get_client_ip(request)
     user_agent = request.META.get('HTTP_USER_AGENT')
 
-    referrer = request.META.get('HTTP_REFERER')
-
-    # Save if not already saved
+    # Save visitor
     if not Visitor.objects.filter(visitor_id=visitor_id).exists():
         Visitor.objects.create(
             visitor_id=visitor_id,
             ip_address=ip,
-            user_agent=user_agent,
-            referrer=referrer
+            user_agent=user_agent
         )
 
     response = render(request, "track-visitor.html")
 
-    # Set cookie (30 days)
     response.set_cookie(
         key='visitor_id',
         value=visitor_id,
         max_age=60*60*24*30,
-        secure=True,        # Important for HTTPS (Render uses HTTPS)
-        httponly=True, # True/False = JavaScript से एक्सेस न हो (सुरक्षा के लिए बेहतर, जब तक JS को ज़रूरत न हो)
-        samesite='None'  # None/Lax = if you want to send "cross site website like fb" then use it.
+        httponly=True,
+        samesite='Lax'
     )
 
     return response
