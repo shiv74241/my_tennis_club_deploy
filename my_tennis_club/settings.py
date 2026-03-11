@@ -128,7 +128,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'shivkumar@741')
 # This will be False on Render, but you can set it to True locally in your .env
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['my-tennis-club-deploy-2.onrender.com', 'localhost', '127.0.0.1']
+#ALLOWED_HOSTS = ['my-tennis-club-deploy-2.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['my-tennis-club-deploy-3.onrender.com', 'localhost', '127.0.0.1']
 
 
 
