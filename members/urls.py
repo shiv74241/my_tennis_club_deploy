@@ -19,6 +19,7 @@ urlpatterns = [
     path('pay/', views.upi_payment, name='upi_payment'),
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('track-visitor/', views.track_visitor, name='track_visitor'),
+    path('track-visitor2/', views.track_visitor2, name='track_visitor2'),
     ]
 
 

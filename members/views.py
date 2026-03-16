@@ -198,3 +198,40 @@ def track_visitor(request):
     )
 
     return response
+
+
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.http import JsonResponse
+from .models import Visitor2
+
+@csrf_exempt
+def track_visitor2(request):
+
+    if request.method == "POST":
+
+        data = json.loads(request.body)
+
+        ip = request.META.get('REMOTE_ADDR')
+
+        Visitor2.objects.create(
+
+            visitor_id=data.get("visitor_id"),
+            session_id=data.get("session_id"),
+
+            ip_address=ip,
+            user_agent=data.get("user_agent"),
+
+            screen_width=data.get("screen_width"),
+            screen_height=data.get("screen_height"),
+
+            language=data.get("language"),
+            timezone=data.get("timezone"),
+
+            page_url=data.get("page_url"),
+            page_title=data.get("page_title"),
+            referrer=data.get("referrer")
+
+        )
+
+        return JsonResponse({"status": "ok"})        
