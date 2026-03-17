@@ -205,6 +205,18 @@ import json
 from django.http import JsonResponse
 from .models import Visitor2
 
+def get_client_ip(request):
+
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]   # real client IP
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+
+    return ip
+
+
 @csrf_exempt
 def track_visitor2(request):
 
@@ -212,7 +224,8 @@ def track_visitor2(request):
 
         data = json.loads(request.body)
 
-        ip = request.META.get('REMOTE_ADDR')
+        # ip = request.META.get('REMOTE_ADDR')
+        ip = get_client_ip(request)
 
         Visitor2.objects.create(
 
