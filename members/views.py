@@ -204,47 +204,58 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
 from .models import Visitor2
+from user_agents import parse
+import requests
 
-def get_client_ip(request):
+def get_location(ip):
+    try:
+        url = f"http://ip-api.com/json/{ip}"
+        response = requests.get(url).json()
 
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        country = response.get("country")
+        city = response.get("city")
 
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]   # real client IP
-    else:
-        ip = request.META.get('REMOTE_ADDR')
+        return country, city
 
-    return ip
+    except:
+        return None, None
 
 
 @csrf_exempt
 def track_visitor2(request):
 
-    if request.method == "POST":
+    data = json.loads(request.body)
 
-        data = json.loads(request.body)
+    ua_string = data.get("user_agent")
+    user_agent = parse(ua_string)
 
-        # ip = request.META.get('REMOTE_ADDR')
-        ip = get_client_ip(request)
+    browser = user_agent.browser.family
+    os = user_agent.os.family
+    device_type = "Mobile" if user_agent.is_mobile else \
+                  "Tablet" if user_agent.is_tablet else \
+                  "PC"
 
-        Visitor2.objects.create(
+    ip = get_client_ip(request)
+    country, city = get_location(ip)
 
-            visitor_id=data.get("visitor_id"),
-            session_id=data.get("session_id"),
+    Visitor2.objects.create(
+        visitor_id=data.get("visitor_id"),
+        session_id=data.get("session_id"),
+        ip_address=ip,
+        user_agent=ua_string,
+        country=country,
+        city=city,
 
-            ip_address=ip,
-            user_agent=data.get("user_agent"),
+        browser=browser,
+        os=os,
+        device_type=device_type,
 
-            screen_width=data.get("screen_width"),
-            screen_height=data.get("screen_height"),
+        screen_width=data.get("screen_width"),
+        screen_height=data.get("screen_height"),
+        language=data.get("language"),
+        timezone=data.get("timezone"),
 
-            language=data.get("language"),
-            timezone=data.get("timezone"),
-
-            page_url=data.get("page_url"),
-            page_title=data.get("page_title"),
-            referrer=data.get("referrer")
-
-        )
-
-        return JsonResponse({"status": "ok"})        
+        page_url=data.get("page_url"),
+        page_title=data.get("page_title"),
+        referrer=data.get("referrer")
+    )
