@@ -199,7 +199,7 @@ def track_visitor(request):
 
     return response
 
-
+# full with client records
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
