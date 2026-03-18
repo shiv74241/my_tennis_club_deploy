@@ -207,15 +207,25 @@ from .models import Visitor2
 from user_agents import parse
 import requests
 
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0]
+    return request.META.get('REMOTE_ADDR')
+
+
 def get_location(ip):
+
+    if ip.startswith("127.") or ip.startswith("192.168"):
+        return None, None
+
     try:
         url = f"http://ip-api.com/json/{ip}"
-        response = requests.get(url).json()
+        response = requests.get(url, timeout=2).json()
 
-        country = response.get("country")
-        city = response.get("city")
-
-        return country, city
+        return response.get("country"), response.get("city")
 
     except:
         return None, None
@@ -224,38 +234,52 @@ def get_location(ip):
 @csrf_exempt
 def track_visitor2(request):
 
-    data = json.loads(request.body)
+    if request.method == "POST":
 
-    ua_string = data.get("user_agent")
-    user_agent = parse(ua_string)
+        try:
+            data = json.loads(request.body)
+        except:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
 
-    browser = user_agent.browser.family
-    os = user_agent.os.family
-    device_type = "Mobile" if user_agent.is_mobile else \
-                  "Tablet" if user_agent.is_tablet else \
-                  "PC"
+        ua_string = data.get("user_agent")
+        user_agent = parse(ua_string)
 
-    ip = get_client_ip(request)
-    country, city = get_location(ip)
+        browser = user_agent.browser.family
+        os = user_agent.os.family
 
-    Visitor2.objects.create(
-        visitor_id=data.get("visitor_id"),
-        session_id=data.get("session_id"),
-        ip_address=ip,
-        user_agent=ua_string,
-        country=country,
-        city=city,
+        device_type = (
+            "Mobile" if user_agent.is_mobile else
+            "Tablet" if user_agent.is_tablet else
+            "PC" if user_agent.is_pc else
+            "Other"
+        )
 
-        browser=browser,
-        os=os,
-        device_type=device_type,
+        ip = get_client_ip(request)
+        country, city = get_location(ip)
 
-        screen_width=data.get("screen_width"),
-        screen_height=data.get("screen_height"),
-        language=data.get("language"),
-        timezone=data.get("timezone"),
+        Visitor2.objects.create(
+            visitor_id=data.get("visitor_id"),
+            session_id=data.get("session_id"),
+            ip_address=ip,
+            user_agent=ua_string,
 
-        page_url=data.get("page_url"),
-        page_title=data.get("page_title"),
-        referrer=data.get("referrer")
-    )
+            country=country,
+            city=city,
+
+            browser=browser,
+            os=os,
+            device_type=device_type,
+
+            screen_width=data.get("screen_width"),
+            screen_height=data.get("screen_height"),
+            language=data.get("language"),
+            timezone=data.get("timezone"),
+
+            page_url=data.get("page_url"),
+            page_title=data.get("page_title"),
+            referrer=data.get("referrer")
+        )
+
+        return JsonResponse({"status": "success"})
+
+    return JsonResponse({"error": "Invalid request"}, status=405)
